@@ -45,7 +45,7 @@ export default function HomePage() {
                 <Link href="/challenges" className="bg-brand-primary dark:bg-white dark:text-brand-primary text-white font-semibold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity">
                     Browse Challenges
                 </Link>
-                <Link href="/enterprise" className="bg-white dark:bg-gray-800 text-brand-text dark:text-white font-semibold py-3 px-8 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <Link href="/post-problem" className="bg-white dark:bg-gray-800 text-brand-text dark:text-white font-semibold py-3 px-8 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     Post a Problem
                 </Link>
             </div>
@@ -62,7 +62,9 @@ export default function HomePage() {
                     {mockCaseStudies.map(study => (
                         <div key={study.problem} className="bg-white dark:bg-gray-800/70 border border-gray-200 dark:border-gray-700 rounded-xl p-8 shadow-sm">
                             <h3 className="text-xl font-bold mb-3">{study.problem}</h3>
-                            <p className="text-brand-secondary dark:text-gray-400 mb-4 text-sm">Solved by <span className="font-semibold text-brand-text dark:text-gray-200">{study.solver}</span> ({study.school})</p>
+                            <p className="text-brand-secondary dark:text-gray-400 mb-4 text-sm">
+                                Solved by <Link href="/profile" className="font-semibold text-brand-text dark:text-gray-200 hover:underline">{study.solver}</Link> ({study.school})
+                            </p>
                             <blockquote className="border-l-4 border-blue-500 pl-4 my-6">
                                 <p className="italic text-gray-800 dark:text-gray-300">"{study.insight}"</p>
                             </blockquote>
