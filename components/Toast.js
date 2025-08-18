@@ -1,42 +1,20 @@
-// FILE: /pages/api/challenges/create.js
-import { PrismaClient } from '@prisma/client';
-// In a real app, you would get the user session to verify they are an enterprise user
-// import { getSession } from 'next-auth/react'; 
+// FILE: /components/Toast.js
+import React, { useEffect } from 'react';
 
-const prisma = new PrismaClient();
+export default function Toast({ message, type, onDone }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onDone();
+    }, 2000); // Notification disappears after 2 seconds
 
-export default async function handler(req, res) {
-  // const session = await getSession({ req });
-  // if (!session || session.user.role !== 'ENTERPRISE') {
-  //   return res.status(401).json({ message: 'Unauthorized' });
-  // }
-  
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+    return () => clearTimeout(timer);
+  }, [onDone]);
 
-  try {
-    const { title, description, points, tags } = req.body;
+  const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
 
-    if (!title || !description || !points || !tags) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const newChallenge = await prisma.challenge.create({
-      data: {
-        title,
-        description,
-        points: parseInt(points, 10),
-        tags: tags.split(',').map(tag => tag.trim()),
-        // authorId: session.user.id, // In a real app, you'd link to the logged-in user
-        authorId: "clx_mock_enterprise_id" // Placeholder for now
-      },
-    });
-
-    res.status(201).json({ message: 'Challenge created successfully', challenge: newChallenge });
-
-  } catch (error) {
-    console.error('Create Challenge API Error:', error);
-    res.status(500).json({ message: 'An unexpected error occurred.' });
-  }
+  return (
+    <div className={`fixed bottom-10 right-10 px-6 py-3 rounded-lg text-white ${bgColor} shadow-lg fade-in z-50`}>
+      {message}
+    </div>
+  );
 }
