@@ -1,4 +1,6 @@
 // FILE: /components/Layout.js
+// DESC: Contains the shared layout, including Header and Footer.
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -47,6 +49,9 @@ const Header = ({ theme, toggleTheme }) => {
                     <button onClick={toggleTheme} className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
                         {/* Icons would go here */}
                     </button>
+                    <Link href="/auth" className="font-medium text-brand-secondary dark:text-gray-400 hover:text-brand-text dark:hover:text-white transition-colors">
+                        Login
+                    </Link>
                     <button className="bg-brand-signature text-white font-semibold py-2 px-5 rounded-md hover:opacity-90 transition-opacity hidden sm:block">Start Solving</button>
                 </div>
             </nav>
