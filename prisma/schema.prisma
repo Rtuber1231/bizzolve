@@ -16,6 +16,7 @@ generator client {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
+  username  String   @unique // New field for unique username
   password  String   // Will be stored as a hash
   name      String?
   role      Role     @default(STUDENT)
@@ -33,6 +34,7 @@ model Challenge {
   title       String
   description String
   points      Int
+  tags        String[] // Added tags for categorization
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
