@@ -28,6 +28,10 @@ export default function Layout({ children }) {
 const Header = () => {
     const router = useRouter();
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    
+    // This is a placeholder. In a real app, you'd get this from a session (e.g., NextAuth.js)
+    const isLoggedIn = true; 
+    const userAvatarUrl = "https://i.pravatar.cc/40?u=1";
 
     useEffect(() => {
         if (isMobileMenuOpen) {
@@ -52,10 +56,18 @@ const Header = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <div className="hidden md:flex items-center space-x-4">
-                        <Link href="/auth" className="font-medium text-brand-secondary dark:text-gray-400 hover:text-brand-text dark:hover:text-white transition-colors">
-                            Login
-                        </Link>
-                        <Link href="/auth" className="bg-brand-signature text-white font-semibold py-2 px-5 rounded-md hover:opacity-90 transition-opacity">Start Solving</Link>
+                        {isLoggedIn ? (
+                            <Link href="/profile">
+                                <img src={userAvatarUrl} alt="User Avatar" className="w-10 h-10 rounded-full border-2 border-transparent hover:border-brand-signature transition-colors" />
+                            </Link>
+                        ) : (
+                            <>
+                                <Link href="/auth" className="font-medium text-brand-secondary dark:text-gray-400 hover:text-brand-text dark:hover:text-white transition-colors">
+                                    Login
+                                </Link>
+                                <Link href="/auth" className="bg-brand-signature text-white font-semibold py-2 px-5 rounded-md hover:opacity-90 transition-opacity">Start Solving</Link>
+                            </>
+                        )}
                     </div>
                     <div className="md:hidden">
                         <button onClick={() => setMobileMenuOpen(true)} className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
