@@ -2,6 +2,7 @@
 // DESC: Contains the shared layout, including Header and Footer.
 
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -29,11 +30,16 @@ export default function Layout({ children }) {
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-background dark:bg-gradient-to-br dark:from-gray-900 dark:to-black text-brand-text dark:text-gray-200">
-      <Header theme={theme} toggleTheme={toggleTheme} />
-      <main className="flex-grow">{children}</main>
-      <Footer />
-    </div>
+    <>
+      <Head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </Head>
+      <div className="min-h-screen flex flex-col bg-brand-background dark:bg-gradient-to-br dark:from-gray-900 dark:to-black text-brand-text dark:text-gray-200">
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <main className="flex-grow">{children}</main>
+        <Footer />
+      </div>
+    </>
   );
 }
 
@@ -45,11 +51,13 @@ const Header = ({ theme, toggleTheme }) => {
         <header className="w-full header-border bg-brand-background/90 dark:bg-gray-900/70 backdrop-blur-sm sticky top-0 z-20">
             <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div className="flex items-center space-x-10">
-                    <Link href="/" className="text-2xl font-bold cursor-pointer">BizSolve</Link>
+                    <Link href="/" className="flex items-center space-x-2 text-2xl font-bold cursor-pointer">
+                        <img src="/favicon.svg" alt="BizSolve Logo" className="h-8 w-8" />
+                        <span>BizSolve</span>
+                    </Link>
                     <div className="hidden md:flex items-center space-x-1">
                         <Link href="/" className={`font-medium px-4 py-2 rounded-md transition-colors ${router.pathname === '/' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}>Home</Link>
                         <Link href="/challenges" className={`font-medium px-4 py-2 rounded-md transition-colors ${router.pathname === '/challenges' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}>Challenges</Link>
-                        <Link href="/profile" className={`font-medium px-4 py-2 rounded-md transition-colors ${router.pathname === '/profile' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}>Profile</Link>
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
