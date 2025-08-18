@@ -1,0 +1,25 @@
+/* FILE: /styles/globals.css */
+/* DESC: Global styles and Tailwind CSS directives. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.header-border {
+    border-bottom: 1px solid;
+    border-image-source: linear-gradient(to right, transparent, #e5e7eb, transparent);
+    border-image-slice: 1;
+}
+
+.dark .header-border {
+    border-image-source: linear-gradient(to right, transparent, #374151, transparent);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

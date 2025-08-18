@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// 1. Define the database connection
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // This will be your database connection string
+}
+
+// 2. Define the Prisma client generator
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 3. Define the User model
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Will be stored as a hash
+  name      String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  challenges  Challenge[]  // A user can author many challenges
+  submissions Submission[] // A user can make many submissions
+}
+
+// 4. Define the Challenge model
+model Challenge {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  points      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation to the author (an Enterprise user)
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  // Relation to submissions
+  submissions Submission[] // A challenge can have many submissions
+}
+
+// 5. Define the Submission model
+model Submission {
+  id          String   @id @default(cuid())
+  content     String   // Could be text or a URL to a file
+  score       Int?     // Optional, as it's unscored initially
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation to the author (a Student user)
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  // Relation to the challenge
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  challengeId String
+}
+
+// Define the user roles
+enum Role {
+  STUDENT
+  ENTERPRISE
+}
