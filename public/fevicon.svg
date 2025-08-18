@@ -1,0 +1,10 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Solid circle for the 'Problem' -->
+    <circle cx="30" cy="50" r="12" fill="#3B82F6"/>
+    
+    <!-- Outlined circle for the 'Solver' -->
+    <circle cx="70" cy="50" r="11" stroke="#3B82F6" stroke-width="2"/>
+    
+    <!-- Connecting 'Synapse' arc -->
+    <path d="M30 50C40 35, 60 35, 70 50" stroke="#3B82F6" stroke-width="2" fill="none"/>
+</svg>
