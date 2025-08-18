@@ -16,12 +16,19 @@ generator client {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  username  String   @unique // New field for unique username
+  username  String   @unique
   password  String   // Will be stored as a hash
   name      String?
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // --- New Detailed Profile Fields ---
+  bio         String?    @db.Text // A longer text field for the bio
+  school      String?    // e.g., "NMIMS Mumbai"
+  avatarUrl   String?    // URL to a profile picture
+  linkedinUrl String?  
+  githubUrl   String?
 
   // Relations
   challenges  Challenge[]  // A user can author many challenges
@@ -34,7 +41,7 @@ model Challenge {
   title       String
   description String
   points      Int
-  tags        String[] // Added tags for categorization
+  tags        String[] 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -49,8 +56,8 @@ model Challenge {
 // 5. Define the Submission model
 model Submission {
   id          String   @id @default(cuid())
-  content     String   // Could be text or a URL to a file
-  score       Int?     // Optional, as it's unscored initially
+  content     String   
+  score       Int?     
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
