@@ -1,5 +1,5 @@
 // FILE: /pages/profile.js
-// DESC: The public profile and portfolio page for a solver.
+// DESC: The public profile and portfolio page for a solver with platform-specific stats.
 
 import React from 'react';
 import Head from 'next/head';
@@ -10,9 +10,9 @@ const solverProfile = {
     name: "Saanvi Iyer",
     username: "@saanvi_iyer",
     school: "NMIMS Mumbai",
-    reviewsPosted: 12,
-    postsCreated: 3,
-    publicCollections: 1,
+    totalSubmissions: 12,
+    followers: 142,
+    averageScore: 88,
     bio: "Aspiring strategy consultant with a passion for solving complex market-entry problems and a keen interest in the D2C space. Proven ability to translate data into actionable insights.",
     avatarUrl: "https://i.pravatar.cc/150?u=1",
     linkedinUrl: "#", // Placeholder
@@ -64,16 +64,16 @@ export default function ProfilePage() {
                         
                         <div className="grid grid-cols-3 gap-4 my-6 text-center">
                             <div>
-                                <p className="text-2xl font-bold text-brand-text dark:text-white">{solverProfile.reviewsPosted}</p>
-                                <p className="text-xs text-brand-secondary dark:text-gray-400">Reviews Posted</p>
+                                <p className="text-2xl font-bold text-brand-text dark:text-white">{solverProfile.totalSubmissions}</p>
+                                <p className="text-xs text-brand-secondary dark:text-gray-400">Submissions</p>
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-brand-text dark:text-white">{solverProfile.postsCreated}</p>
-                                <p className="text-xs text-brand-secondary dark:text-gray-400">Posts Created</p>
+                                <p className="text-2xl font-bold text-brand-text dark:text-white">{solverProfile.followers}</p>
+                                <p className="text-xs text-brand-secondary dark:text-gray-400">Followers</p>
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-brand-text dark:text-white">{solverProfile.publicCollections}</p>
-                                <p className="text-xs text-brand-secondary dark:text-gray-400">Collections</p>
+                                <p className="text-2xl font-bold text-brand-text dark:text-white">{solverProfile.averageScore}%</p>
+                                <p className="text-xs text-brand-secondary dark:text-gray-400">Avg. Score</p>
                             </div>
                         </div>
                         
