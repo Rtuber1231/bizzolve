@@ -23,12 +23,16 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // --- New Detailed Profile Fields ---
-  bio         String?    @db.Text // A longer text field for the bio
-  school      String?    // e.g., "NMIMS Mumbai"
-  avatarUrl   String?    // URL to a profile picture
+  // --- Profile Fields ---
+  bio         String?    @db.Text 
+  school      String?    
+  avatarUrl   String?    
   linkedinUrl String?  
   githubUrl   String?
+
+  // --- Follower Relationship ---
+  followers User[] @relation("UserFollows")
+  following User[] @relation("UserFollows")
 
   // Relations
   challenges  Challenge[]  // A user can author many challenges
