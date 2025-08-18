@@ -33,13 +33,6 @@ const mockSubmissions = [
         points: 500,
         domain: "Marketing"
     },
-    { 
-        id: 3,
-        problem: "HR Policy Redesign for a Hybrid Workforce", 
-        insight: "Designed a flexible 'work-from-anywhere' policy with quarterly in-person collaboration sprints.",
-        points: 850,
-        domain: "Human Resources"
-    },
 ];
 
 const SocialLink = ({ href, icon, text }) => (
@@ -69,9 +62,9 @@ export default function ProfilePage() {
                         <p className="text-md text-brand-secondary dark:text-gray-400 mt-1">{solverProfile.school}</p>
                         
                         {isOwner && (
-                            <button className="w-full mt-6 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors">
+                            <Link href="/edit-profile" className="block w-full mt-6 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors">
                                 Edit Profile
-                            </button>
+                            </Link>
                         )}
                     </div>
                     
