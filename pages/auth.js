@@ -1,12 +1,12 @@
 // FILE: /pages/auth.js
-// DESC: Fully functional signup and login page connected to the backend API and session context.
+// DESC: A new page for user signup and login.
 
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import PasswordStrength from '../components/PasswordStrength';
 import Toast from '../components/Toast';
-import { useSession } from '../context/SessionContext'; // Import the session hook
+import { useSession } from '../context/SessionContext';
+import { useRouter } from 'next/router';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,7 +15,7 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const router = useRouter();
-  const { login } = useSession(); // Get the login function from context
+  const { login } = useSession();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,7 +25,32 @@ export default function AuthPage() {
     setFormData({ ...formData, role });
   };
 
-  // ... (useEffect for username check remains the same)
+  // Debounce effect for username checking
+  useEffect(() => {
+    if (isLogin || formData.username.length < 3) {
+      setUsernameAvailable(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const checkUsername = async () => {
+        try {
+          const res = await fetch('/api/auth/check-username', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: formData.username }),
+          });
+          const data = await res.json();
+          setUsernameAvailable(data.available);
+        } catch (error) {
+          console.error("Failed to check username", error);
+        }
+      };
+      checkUsername();
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [formData.username, isLogin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +69,7 @@ export default function AuthPage() {
 
         if (res.ok) {
             setToast({ message: data.message, type: 'success' });
-            login(data.user); // Set the user in the global session state
+            login(data.user);
             setTimeout(() => {
                 router.push(data.user.role === 'STUDENT' ? '/profile' : '/enterprise');
             }, 1000);
@@ -73,7 +98,50 @@ export default function AuthPage() {
             </p>
             
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Form fields remain the same */}
+              {!isLogin && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">I am a...</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button type="button" onClick={() => handleRoleChange('STUDENT')} className={`px-4 py-2 rounded-md text-sm font-semibold border transition-colors ${formData.role === 'STUDENT' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600'}`}>Solver</button>
+                    <button type="button" onClick={() => handleRoleChange('ENTERPRISE')} className={`px-4 py-2 rounded-md text-sm font-semibold border transition-colors ${formData.role === 'ENTERPRISE' ? 'bg-blue-500 text-white border-blue-500' : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600'}`}>Enterprise</button>
+                  </div>
+                </div>
+              )}
+
+              {!isLogin && (
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name or Company Name</label>
+                  <input type="text" name="name" id="name" required onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm" />
+                </div>
+              )}
+
+              {!isLogin && (
+                <div>
+                  <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Username</label>
+                  <div className="relative">
+                    <input type="text" name="username" id="username" required onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm" />
+                    {usernameAvailable === true && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-xs">Available</span>}
+                    {usernameAvailable === false && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 text-xs">Taken</span>}
+                  </div>
+                </div>
+              )}
+              
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                <input type="email" name="email" id="email" required onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm" />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                <input type="password" name="password" id="password" required onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm" />
+                {!isLogin && <PasswordStrength password={formData.password} />}
+              </div>
+              
+              <div>
+                <button type="submit" disabled={isLoading} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-signature hover:opacity-90 disabled:opacity-50">
+                  {isLoading ? 'Processing...' : (isLogin ? 'Log In' : 'Create Account')}
+                </button>
+              </div>
             </form>
 
             <div className="mt-6 text-center">
