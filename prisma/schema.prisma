@@ -23,16 +23,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // --- Profile Fields ---
-  bio         String?    @db.Text 
-  school      String?    
-  avatarUrl   String?    
+  // --- New Detailed Profile Fields ---
+  bio         String?    @db.Text // A longer text field for the bio
+  school      String?    // e.g., "NMIMS Mumbai"
+  avatarUrl   String?    // URL to a profile picture
   linkedinUrl String?  
   githubUrl   String?
-
-  // --- Follower Relationship ---
-  followers User[] @relation("UserFollows")
-  following User[] @relation("UserFollows")
 
   // Relations
   challenges  Challenge[]  // A user can author many challenges
@@ -72,16 +68,6 @@ model Submission {
   // Relation to the challenge
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   challengeId String
-}
-
-// 6. New Model for Contact Queries
-model Query {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  message   String   @db.Text
-  createdAt DateTime @default(now())
 }
 
 // Define the user roles
