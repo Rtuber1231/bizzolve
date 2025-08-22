@@ -1,20 +1,26 @@
 // FILE: /pages/edit-profile.js
-// DESC: An updated page for the user to edit their profile, including avatar management.
+// DESC: A new page for the authorized user to edit their profile details.
 
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Toast from '../components/Toast'; // Assuming you have a Toast component
 
-// In a real app, this data would be fetched from the database
+// In a real app, this data would be fetched from the database for the logged-in user
 const initialProfileData = {
     name: "Saanvi Iyer",
     school: "NMIMS Mumbai",
     bio: "Aspiring strategy consultant with a passion for solving complex market-entry problems and a keen interest in the D2C space. Proven ability to translate data into actionable insights.",
-    avatarUrl: "https://i.pravatar.cc/150?u=1",
+    avatarUrl: "", // Start with no avatar URL
     linkedinUrl: "https://linkedin.com/in/saanvi-iyer",
     githubUrl: "https://github.com/saanvi-iyer",
 };
+
+const DefaultAvatar = ({ name }) => (
+    <div className="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-4xl font-bold">
+        {name ? name.charAt(0).toUpperCase() : '?'}
+    </div>
+);
 
 export default function EditProfilePage() {
   const [formData, setFormData] = useState(initialProfileData);
@@ -37,7 +43,8 @@ export default function EditProfilePage() {
 
   const handleRemoveAvatar = () => {
       setAvatarFile(null);
-      setAvatarPreview(null); // Or a default placeholder image URL
+      setAvatarPreview(null);
+      setFormData(prev => ({ ...prev, avatarUrl: '' }));
   }
 
   const handleSubmit = async (e) => {
@@ -84,7 +91,10 @@ export default function EditProfilePage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Profile Picture */}
               <div className="flex items-center gap-6">
-                <img src={avatarPreview || `https://placehold.co/96x96/E2E8F0/4A5568?text=Avatar`} alt="Avatar Preview" className="w-24 h-24 rounded-full object-cover" />
+                {avatarPreview ? 
+                    <img src={avatarPreview} alt="Avatar Preview" className="w-24 h-24 rounded-full object-cover" /> :
+                    <DefaultAvatar name={formData.name} />
+                }
                 <div className="flex items-center gap-2">
                     <label htmlFor="avatar-upload" className="cursor-pointer bg-white dark:bg-gray-700 text-brand-text dark:text-white font-semibold py-2 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
                         Change
