@@ -74,6 +74,16 @@ model Submission {
   challengeId String
 }
 
+// 6. New Model for Contact Queries
+model Query {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
 // Define the user roles
 enum Role {
   STUDENT
