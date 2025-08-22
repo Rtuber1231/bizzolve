@@ -1,11 +1,9 @@
 // FILE: /pages/api/profile/update.js
-// DESC: Handles updating a user's profile information in the database.
+// DESC: Updated to use the efficient, cached Prisma Client.
 
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../../lib/prisma'; // Import the new client
 // In a real app, you would get the user's session to authorize this action
 // import { getSession } from 'next-auth/react';
-
-const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   // const session = await getSession({ req });
