@@ -1,7 +1,7 @@
 // FILE: /components/Layout.js
-// DESC: Contains the shared layout, with two new separate dropdown menus in the header.
+// DESC: Contains the shared layout, with improved dropdowns that close on outside clicks.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -31,6 +31,9 @@ const Header = () => {
     const [isUserMenuOpen, setUserMenuOpen] = useState(false);
     const [isMoreMenuOpen, setMoreMenuOpen] = useState(false);
     
+    const userMenuRef = useRef(null);
+    const moreMenuRef = useRef(null);
+    
     // This is a placeholder. In a real app, you'd get this from a session
     const isLoggedIn = true; 
     const userAvatarUrl = "https://i.pravatar.cc/40?u=1";
@@ -39,6 +42,24 @@ const Header = () => {
         if (isMobileMenuOpen) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'auto';
     }, [isMobileMenuOpen]);
+
+    // Effect to handle clicks outside of the dropdowns
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (userMenuRef.current && !userMenu-ref.current.contains(event.target)) {
+                setUserMenuOpen(false);
+            }
+            if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
+                setMoreMenuOpen(false);
+            }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [userMenuRef, moreMenuRef]);
 
     return (
         <header className="w-full header-border bg-brand-background/90 dark:bg-gray-900/70 backdrop-blur-sm sticky top-0 z-20">
@@ -52,7 +73,7 @@ const Header = () => {
                         <Link href="/" className={`font-medium px-4 py-2 rounded-md transition-colors ${router.pathname === '/' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}>Home</Link>
                         <Link href="/challenges" className={`font-medium px-4 py-2 rounded-md transition-colors ${router.pathname === '/challenges' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}>Challenges</Link>
                         {/* More Dropdown */}
-                        <div className="relative">
+                        <div className="relative" ref={moreMenuRef}>
                             <button onClick={() => setMoreMenuOpen(!isMoreMenuOpen)} className="font-medium px-4 py-2 rounded-md transition-colors text-brand-secondary dark:text-gray-400 hover:text-brand-text dark:hover:text-white flex items-center gap-1">
                                 <span>More</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${isMoreMenuOpen ? 'rotate-180' : ''}`}><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -69,7 +90,7 @@ const Header = () => {
                 <div className="flex items-center space-x-2">
                     <div className="hidden md:flex items-center space-x-4">
                         {isLoggedIn ? (
-                            <div className="relative">
+                            <div className="relative" ref={userMenuRef}>
                                 <button onClick={() => setUserMenuOpen(!isUserMenuOpen)}>
                                     <img src={userAvatarUrl} alt="User Avatar" className="w-10 h-10 rounded-full border-2 border-transparent hover:border-brand-signature transition-colors" />
                                 </button>
