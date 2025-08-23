@@ -1,5 +1,5 @@
 // FILE: /components/Layout.js
-// DESC: Contains the shared layout, with improved dropdowns that close on outside clicks.
+// DESC: Contains the shared layout, with the hamburger menu functionality restored.
 
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
@@ -54,10 +54,8 @@ const Header = () => {
                 setMoreMenuOpen(false);
             }
         }
-        // Bind the event listener
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [userMenuRef, moreMenuRef]);
@@ -117,6 +115,7 @@ const Header = () => {
                             </>
                         )}
                     </div>
+                    {/* Mobile Menu Button (Hamburger) */}
                     <div className="md:hidden">
                         <button onClick={() => setMobileMenuOpen(true)} className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -125,7 +124,21 @@ const Header = () => {
                 </div>
             </nav>
 
-            {/* Mobile Menu ... */}
+            {/* Full-Screen Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden fixed inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center fade-in">
+                    <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                    <div className="flex flex-col items-center space-y-8">
+                        <Link href="/" onClick={() => setMobileMenuOpen(false)} className="font-semibold text-2xl">Home</Link>
+                        <Link href="/challenges" onClick={() => setMobileMenuOpen(false)} className="font-semibold text-2xl">Challenges</Link>
+                        <Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="font-semibold text-2xl">Profile</Link>
+                        <Link href="/auth" onClick={() => setMobileMenuOpen(false)} className="font-semibold text-2xl">Login</Link>
+                        <Link href="/auth" onClick={() => setMobileMenuOpen(false)} className="w-full text-center bg-brand-signature text-white font-semibold py-3 px-8 rounded-md hover:opacity-90 transition-opacity mt-6">Start Solving</Link>
+                    </div>
+                </div>
+            )}
         </header>
     );
 };
